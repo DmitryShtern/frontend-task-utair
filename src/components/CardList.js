@@ -2,11 +2,6 @@ import React, { Component } from "react"
 import styled from "styled-components"
 
 export default class CardList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-
   render() {
     const { cardList, deleteCard, markCard } = this.props
 
@@ -15,13 +10,13 @@ export default class CardList extends Component {
 
       switch (type) {
         case "padding":
-          return listIsEmpty ? "5%" : "0"
+          return listIsEmpty ? "5%" : "4% 1%"
         case "left":
-          return listIsEmpty ? "35%" : "15%"
+          return listIsEmpty ? "30%" : "15%"
         case "width":
-          return listIsEmpty ? "20%" : "70%"
+          return listIsEmpty ? "30%" : "66%"
         case "height":
-          return listIsEmpty ? "5%" : "60%"
+          return listIsEmpty ? "5%" : "48%"
       }
     }
 
@@ -41,10 +36,11 @@ export default class CardList extends Component {
     `
 
     const Card = styled.div`
+      display: ${props => (props.id < cardList.length - 8 ? "none" : "inline-block")}
       position: relative;
-      margin: 5% 5%;
-      width: 14%;
-      height: 35%;
+      margin: 0 3% 4%;
+      width: 17%;
+      height: 45%;
       border: 1px solid #ddd;
       border-radius: 10px;
     `
@@ -58,7 +54,7 @@ export default class CardList extends Component {
 
     const CardColor = styled.div`
       margin: 15% 35%;
-      border: 1px solid #000;
+      border: 1px solid #ddd;
       border-radius: 10px;
       width: 30%;
       height: 20%;
@@ -107,7 +103,7 @@ export default class CardList extends Component {
 
     const CardList = cardList.map(card => {
       return (
-        <Card key={card.id}>
+        <Card key={card.id} id={card.id}>
           <CardColor color={card.color} />
           <CardTitle>{card.color.toUpperCase()}</CardTitle>
           <CardFavoriteButton favorite={card.favorite} onClick={() => markCard(card.id)} />
@@ -116,12 +112,14 @@ export default class CardList extends Component {
       )
     })
 
-    const content = cardList.length > 0 ? CardList : "Список карточек пуст.. 😕"
-
-    console.log("cardList.length: " + cardList.length)
-    console.log("cardList: " + cardList)
-    console.log("content: " + content)
-    console.log("cardList.length > 0 is a " + (cardList.length > 0))
+    const content =
+      cardList.length > 0 ? (
+        CardList
+      ) : (
+        <div>
+          Список карточек пуст.. 😕<br />Добавьте несколько в окошке выше
+        </div>
+      )
 
     return <List>{content}</List>
   }

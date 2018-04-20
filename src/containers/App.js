@@ -6,12 +6,8 @@ import { addCard, deleteCard, markCard } from "../actions"
 import { Header, CardList } from "../components"
 
 class App extends Component {
-  componentWillMount() {
-    this.props.addCard("aqua")
-  }
-
   render() {
-    const { cardList, addCard, markCard, deleteCard } = this.props
+    const { addCard, cardList, markCard, deleteCard } = this.props
 
     return (
       <div>

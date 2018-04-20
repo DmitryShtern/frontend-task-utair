@@ -14,7 +14,7 @@ export default class Header extends Component {
     clearTimeout(this.state.timerID)
     const value = e.target.value
 
-    const timerID = setTimeout(() => this.setState({ hexValue: value }), 100)
+    const timerID = setTimeout(() => this.setState({ hexValue: value }), 10)
     this.setState({ timerID: timerID })
 
     if (e.key === "Enter") {
@@ -23,29 +23,24 @@ export default class Header extends Component {
   }
 
   handleAddCard = () => {
-    console.log("handldeAddCard")
+    const isValidValue = this.validateValue()
 
-    this.validateValue()
+    isValidValue
       ? this.props.addCard(this.state.hexValue)
       : alert("Неверный формат значения.. Пример: #FED или #F0E1D2")
+
+    setTimeout(() => this.setState({ hexValue: "" }), 20)
   }
 
   validateValue = () => {
-    console.log("validateValue")
-
     const value = this.state.hexValue
 
-    console.log("value: " + value)
-
-    if (value === "" || value.indexOf(" ") !== -1 || value.indexOf("#") === -1) {
-      console.log("1")
+    if (value === "" || value.indexOf(" ") !== -1 || value.indexOf("#") !== 0) {
       return false
     } else if (value.length !== 4 && value.length !== 7) {
-      console.log("2")
       return false
     }
 
-    console.log("3")
     return true
   }
 
