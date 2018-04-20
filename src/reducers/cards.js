@@ -48,6 +48,16 @@ const list = handleActions(
   lsArray,
 )
 
+const moveDirection = handleActions(
+  {
+    [CARD_ADD]: () => "normal",
+    [CARD_DELETE]: () => "reverse",
+    [CARD_MARK]: () => "none",
+  },
+  "normal",
+)
+
 export default combineReducers({
   list,
+  moveDirection,
 })

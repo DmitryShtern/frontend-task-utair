@@ -7,12 +7,17 @@ import { Header, CardList } from "../components"
 
 class App extends Component {
   render() {
-    const { addCard, cardList, markCard, deleteCard } = this.props
+    const { addCard, cardList, markCard, deleteCard, moveDirection } = this.props
 
     return (
       <div>
         <Header addCard={addCard} />
-        <CardList cardList={cardList} markCard={markCard} deleteCard={deleteCard} />
+        <CardList
+          cardList={cardList}
+          markCard={markCard}
+          deleteCard={deleteCard}
+          moveDirection={moveDirection}
+        />
       </div>
     )
   }
@@ -20,10 +25,12 @@ class App extends Component {
 
 App.propTypes = {
   cardList: PropTypes.array.isRequired,
+  moveDirection: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = state => ({
   cardList: state.cards.list,
+  moveDirection: state.cards.moveDirection,
 })
 
 const mapDispatchToProps = {

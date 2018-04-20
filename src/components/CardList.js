@@ -1,16 +1,16 @@
 import React, { Component } from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 
 export default class CardList extends Component {
   render() {
-    const { cardList, deleteCard, markCard } = this.props
+    const { cardList, deleteCard, markCard, moveDirection } = this.props
 
     const DynamicSize = type => {
-      const listIsEmpty = cardList.length === 0 ? true : false
+      const listIsEmpty = cardList.length === 0
 
       switch (type) {
         case "padding":
-          return listIsEmpty ? "5%" : "4% 1%"
+          return listIsEmpty ? "5%" : "4% 1% 4%"
         case "left":
           return listIsEmpty ? "30%" : "15%"
         case "width":
@@ -27,6 +27,7 @@ export default class CardList extends Component {
       left: ${DynamicSize("left")}
       width: ${DynamicSize("width")}
       height: ${DynamicSize("height")}
+      overflow: scroll;
       background-color: #fff;
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -35,14 +36,52 @@ export default class CardList extends Component {
       color: #000;
     `
 
+    const moveCard = id => {
+      let x,
+        y,
+        rId = id
+
+      if (moveDirection === "normal") {
+        x = "left"
+        y = "top"
+      } else if (moveDirection === "reverse") {
+        x = "right"
+        y = "bottom"
+        rId++
+      }
+
+      if (rId % 4 === 0 && id !== 0) {
+        return keyframes`
+              0% {${x}: 69%; ${y}: -55%}
+              25% {${x}: 92%; ${y}: -55%}
+              26% {${x}: 100%; ${y}: 100%}
+              27% {${x}: -100%; ${y}: 100%}
+              28% {${x}: -100%; ${y}: 0%}
+              100% {${x}: 0;}
+          `
+      } else if (id === 0) {
+        return keyframes`
+              0% {${x}: -23%;}
+              100% {${x}: 0%;}
+            `
+      } else {
+        return keyframes`
+              0% {${x}: -23%;}
+              100% {${x}: 0%;}
+            `
+      }
+    }
+
     const Card = styled.div`
-      display: ${props => (props.id < cardList.length - 8 ? "none" : "inline-block")}
+      display: inline-block;
       position: relative;
       margin: 0 3% 4%;
       width: 17%;
       height: 45%;
       border: 1px solid #ddd;
       border-radius: 10px;
+
+      animation: ${props => moveCard(props.Idx)} 0.5s ease-in-out 1;
     `
 
     const CardTitle = styled.label`
@@ -58,7 +97,7 @@ export default class CardList extends Component {
       border-radius: 10px;
       width: 30%;
       height: 20%;
-      background-color: ${props => props.color || "#000"};
+      background-color: ${props => props.Color || "#000"};
     `
 
     const CardFavoriteButton = styled.button`
@@ -73,7 +112,7 @@ export default class CardList extends Component {
       cursor: pointer;
 
       :hover {
-        background-color: #ff08;
+        background-color: rgba(255, 255, 0, 0.3);
       }
 
       :active {
@@ -101,10 +140,10 @@ export default class CardList extends Component {
       }
     `
 
-    const CardList = cardList.map(card => {
+    const CardList = cardList.map((card, idx) => {
       return (
-        <Card key={card.id} id={card.id}>
-          <CardColor color={card.color} />
+        <Card key={card.id} Id={card.id} Idx={idx}>
+          <CardColor Color={card.color} />
           <CardTitle>{card.color.toUpperCase()}</CardTitle>
           <CardFavoriteButton favorite={card.favorite} onClick={() => markCard(card.id)} />
           <CardDeleteButton onClick={() => deleteCard(card.id)} />
